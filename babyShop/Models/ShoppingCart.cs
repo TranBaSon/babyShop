@@ -68,10 +68,10 @@ namespace babyShop.Models
 
     public class CartItem
     {
-        public int ProductId { get; set; } // chính
-        public string ProductName { get; set; } // optional
-        public string ProductThumbnail { get; set; } // optional
-        public double ProductPrice { get; set; } // optional
+        public int ProductId { get; set; } 
+        public string ProductName { get; set; } 
+        public string ProductThumbnail { get; set; } 
+        public double ProductPrice { get; set; } 
         public double TotalItemPrice => ProductPrice * Quantity;
         public int Quantity { get; set; }
 

@@ -11,18 +11,16 @@ namespace babyShop.Controllers
     public class ShoppingCartController : Controller
     {
         private MyDbContext db = new MyDbContext();
-        // Tên của shopping cart trong session.
+        
         private const string ShoppingCartSessionName = "SHOPPING_CART";
-        // Action có tên là AddToCart. Có tham số truyền vào là id sản phẩm và số lượng muốn cho vào giỏ hàng.
-        // Thêm một sản phẩm vào cart
+        
         [HttpPost]
         public ActionResult AddToCart(int productId, int quantity)
         {
-            // Check product có tồn tại không?
+            
             var existingProduct = db.Products.FirstOrDefault(p => p.Id == productId);
             if (existingProduct == null)
             {
-                // trả về 404
                 return new HttpNotFoundResult();
             }
             var shoppingCart = GetShoppingCart();
@@ -31,7 +29,6 @@ namespace babyShop.Controllers
             return Redirect(Request.UrlReferrer.ToString());
         }
 
-        // hiển thị danh sách sản phẩm được thêm vào shopping cart.
         public ActionResult ShowCart()
         {
             return View("ShowCart", GetShoppingCart());
@@ -43,7 +40,6 @@ namespace babyShop.Controllers
             var existingProduct = db.Products.FirstOrDefault(p => p.Id == productId);
             if (existingProduct == null)
             {
-                // trả về 404
                 return new HttpNotFoundResult();
             }
             var shoppingCart = GetShoppingCart();
@@ -70,13 +66,11 @@ namespace babyShop.Controllers
         private ShoppingCart GetShoppingCart()
         {
             ShoppingCart shoppingCart = null;
-            // Kiểm tra sự tồn tại của sc(shopping cart) trong session.
+
             if (Session[ShoppingCartSessionName] != null)
             {
-                // nếu có
                 try
                 {
-                    // ép kiểu đối tượng lấy được về kiểu ShoppingCart.
                     shoppingCart = Session[ShoppingCartSessionName] as ShoppingCart;
                 }
                 catch (Exception e)
