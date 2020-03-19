@@ -1,0 +1,63 @@
+﻿@model babyShop.Models.ShoppingCart
+
+@{
+    ViewBag.Title = "ShowCart";
+    int index = 1;
+}
+
+<h2>ShowCart</h2>
+
+
+<table class="table">
+    <tr>
+        <td>Index</td>
+        <td>Image</td>
+        <td>Name</td>
+        <td>Price (VND)</td>
+        <td>Quantity</td>
+        <td>Total Item Price</td>
+        <td></td>
+    </tr>
+    @foreach (var item in Model.Items.Values)
+    {
+        <tr>
+            <td>@index</td>
+            <td><img src="@item.ProductThumbnail" style="width: 100px"></td>
+            <td>@item.ProductName</td>
+            <td>@item.ProductPrice</td>
+            <td><input type="number" productId="@item.ProductId" id="quantity" name="quantity" min="1" max="9" step="1" value="@item.Quantity" /></td>
+            <td>@item.TotalItemPrice</td>
+            <td>@Html.ActionLink("xóa", "RemoveCartItem", new { Controller = "ShoppingCart", productId = item.ProductId })</td>
+        </tr>
+        index++;
+    }
+    <input type="hidden" name="__RequestVerificationToken" id="#token" />
+</table>
+@if (Model.Items.Count > 0)
+{
+    <div style="float:right;">@Html.ActionLink("xóa tất cả", "RemoveAll", new { Controller = "ShoppingCart" })</div>
+}
+<strong>Total Price: @Model.TotalPrice (VND)</strong>
+
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            $("#quantity").change(function () {
+                $.post("/ShoppingCart/UpdateCart",
+                    {
+                        quantity: $(this).val(),
+                        productId: $(this).attr("productId"),
+                        __RequestVerificationToken: $("#token").val()
+                    }).done(
+                        function (data, status) {
+                            console.log("Data: " + data + "\nStatus: " + status);
+                            $(location).attr('href', "/ShoppingCart/ShowCart");
+                        }).fail(function (xhr, status, error) {
+                            alert("error!");
+                        });
+
+            });
+        });
+    </script>
+}
